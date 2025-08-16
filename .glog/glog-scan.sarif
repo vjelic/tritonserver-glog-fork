@@ -10,7 +10,20 @@
           "version": "1.0.0",
           "semanticVersion": "1.0.0",
           "informationUri": "https://www.glog.ai",
-          "rules": [],
+          "rules": [
+            {
+              "id": "glog-7421e198-d7e1-42b4-bbf3-dd31b5435894",
+              "help": {
+                "text": "",
+                "markdown": "## Description\n\n\"Potential Unsafe Use of Temporary File/Directory\" vulnerability in Python refers to the insecure creation or use of temporary files or directories. This can lead to a variety of security issues, such as race conditions, information disclosure, or privilege escalation. In the provided code snippet, the vulnerability arises from the use of `listdir(\"/dev/shm\")` which lists all shared memory segments. An attacker could potentially manipulate these segments leading to a security breach.\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, it is recommended to use secure methods for creating and using temporary files or directories. Python's `tempfile` module provides functions for creating secure temporary files and directories. It's also important to set appropriate permissions for temporary files and directories to prevent unauthorized access.\n\n## Source Code Fix Recommendation\n\nInstead of using `listdir(\"/dev/shm\")`, use the `tempfile` module to securely create and use temporary files and directories. Here's an example:\n\n```python\nimport tempfile\n\n# Create a temporary directory using the context manager\nwith tempfile.TemporaryDirectory() as tmpdirname:\n    print('created temporary directory', tmpdirname)\n```\n\nIn this example, a temporary directory is securely created and its name is printed. The directory and its contents are automatically cleaned up when the context is exited.\n\n## Library Dependencies\n\nThe code example requires the `os` module from Python's standard library.\n\n## References\n\n- [CWE-377: Insecure Temporary File](https://cwe.mitre.org/data/definitions/377.html)"
+              },
+              "properties": {
+                "tags": [
+                  "B108"
+                ]
+              }
+            }
+          ],
           "language": "en-US",
           "contents": [
             "localizedData",
@@ -20,7 +33,45 @@
         }
       },
       "language": "en-US",
-      "results": [],
+      "results": [
+        {
+          "ruleId": "glog-7421e198-d7e1-42b4-bbf3-dd31b5435894",
+          "kind": "fail",
+          "level": "warning",
+          "message": {
+            "text": "Potential Unsafe Use of Temporary File/Directory"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "qa/common/shm_util.py"
+                },
+                "region": {
+                  "startLine": 450,
+                  "startColumn": 31,
+                  "endLine": 450,
+                  "endColumn": 41,
+                  "snippet": {
+                    "text": "        shm_regions = listdir(\"/dev/shm\")\n"
+                  }
+                },
+                "contextRegion": {
+                  "startLine": 449,
+                  "endLine": 451,
+                  "snippet": {
+                    "text": "        self._shm_monitors = []\n        shm_regions = listdir(\"/dev/shm\")\n        for shm_region in shm_regions:\n"
+                  }
+                }
+              }
+            }
+          ],
+          "properties": {
+            "issue_severity": "MEDIUM",
+            "issue_confidence": "MEDIUM"
+          }
+        }
+      ],
       "newlineSequences": [
         "\r\n",
         "\n"
